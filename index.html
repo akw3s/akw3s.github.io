@@ -103,6 +103,49 @@ footer span { color:#ff4d4d;}
 </head>
 <body>
 
+<canvas id="stars"></canvas>
+
+<div class="container">
+  <h1 class="glitch">Akwes</h1>
+  <h2>14 y.o Student Learning CS and more...</h2>
+
+  <!-- About Me -->
+  <section>
+    <h3>About Me</h3>
+    <p>Hi, I'm Akwes, a 14 year old guy that loves Vibe-coding and playing games.</p>
+  </section>
+
+  <!-- Skills -->
+  <section>
+    <h3> Skills</h3>
+    <p><strong>Languages I know:</strong> English, Russian, Hebrew</p>
+    <p><strong>Tools & Tech:</strong> Arduino IDE, VSCode, Android Studio</p>
+    <p><strong>Currently Learning:</strong> Python</p>
+  </section>
+
+  <!-- Favorites -->
+  <section>
+    <h3>Games and music I like</h3>
+    <p><strong>Games:</strong> Minecraft, Counter-Strike</p>
+    <p><strong>Music:</strong> What Spotify Gives</p>
+  </section>
+
+  <!-- Connect -->
+  <section>
+    <h3>Contact Me</h3>
+    <div class="links">
+      <a href="https://github.com/akw3s" target="_blank">GitHub</a>
+      <a href="mailto:ust33867+site@gmail.com">Email</a>
+      <a href="https://t.me/tamirkina_berloga" target="_blank">Telegram</a>
+      <span>Discord: got banned</span>
+    </div>
+  </section>
+
+  <footer>
+     Akwes | Made with <3 <span></span>
+  </footer>
+</div>
+
 <script>
 // Snowflake background
 const canvas = document.getElementById("stars");
@@ -157,82 +200,6 @@ window.addEventListener("resize", () => {
 });
 </script>
 
-
-<div class="container">
-  <h1 class="glitch">Akwes</h1>
-  <h2>14 y.o Student Learning CS and more...</h2>
-
-  <!-- About Me -->
-  <section>
-    <h3>About Me</h3>
-    <p>Hi, I'm Akwes, a 14 year old guy that loves Vibe-coding and playing games.</p>
-  </section>
-
-  <!-- Skills -->
-  <section>
-    <h3> Skills</h3>
-    <p><strong>Languages I know:</strong> English, Russian, Hebrew</p>
-    <p><strong>Tools & Tech:</strong> Arduino IDE, VSCode, Android Studio</p>
-    <p><strong>Currently Learning:</strong> Python</p>
-  </section>
-
-  <!-- Favorites -->
-  <section>
-    <h3>Games and music I like</h3>
-    <p><strong>Games:</strong> Minecraft, Counter-Strike</p>
-    <p><strong>Music:</strong> What Spotify Gives</p>
-  </section>
-
-  <!-- Connect -->
-  <section>
-    <h3>Contact Me</h3>
-    <div class="links">
-      <a href="https://github.com/akw3s" target="_blank">GitHub</a>
-      <a href="mailto:ust33867+site@gmail.com">Email</a>
-      <a href="https://t.me/tamirkina_berloga" target="_blank">Telegram</a>
-      <span>Discord: got banned</span>
-    </div>
-  </section>
-
-  <footer>
-     Akwes | Made with <3 <span></span>
-  </footer>
-</div>
-
-<script>
-// Star background
-const canvas = document.getElementById("stars");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const stars = Array.from({length:200}, () => ({
-  x: Math.random()*canvas.width,
-  y: Math.random()*canvas.height,
-  r: Math.random()*1.5,
-  speed: Math.random()*0.3+0.1
-}));
-
-function drawStars() {
-  ctx.fillStyle = "rgba(0,0,0,0.3)";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle = "yellow";
-  stars.forEach(s => {
-    ctx.beginPath();
-    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-    ctx.fill();
-    s.y += s.speed;
-    if(s.y>canvas.height) s.y=0;
-  });
-  requestAnimationFrame(drawStars);
-}
-drawStars();
-
-window.addEventListener("resize", ()=>{
-  canvas.width=window.innerWidth;
-  canvas.height=window.innerHeight;
-});
-</script>
 
 </body>
 </html>
