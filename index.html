@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akwes | Portfolio</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+/* Body */
+body {
+  margin: 0;
+  font-family: 'Space Mono', monospace;
+  background: black;
+  color: #f5f5f5;
+  line-height: 1.6;
+  padding: 40px 60px;
+  position: relative;
+  display: block; /* normal flow for scrolling */
+}
+
+/* Star background */
+#stars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* Container for content */
+.container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Glitch effect for name */
+.glitch {
+  font-size: 4rem;
+  position: relative;
+  color: #fff;
+  display: inline-block;
+  animation: flicker 1s infinite;
+}
+
+.glitch::before,
+.glitch::after {
+  content: "Akwes";
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0.8;
+}
+
+.glitch::before {
+  color: #0ff;
+  z-index: -1;
+  animation: glitchTop 2s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+  color: #f0f;
+  z-index: -2;
+  animation: glitchBottom 1.8s infinite linear alternate-reverse;
+}
+
+@keyframes flicker {
+  0%,19%,21%,23%,25%,54%,56%,100% {opacity:1;}
+  20%,22%,24%,55% {opacity:0.4;}
+}
+
+@keyframes glitchTop {
+  0% { transform: translate(0,0);}
+  20% { transform: translate(-2px,-2px);}
+  40% { transform: translate(-2px,2px);}
+  60% { transform: translate(2px,-2px);}
+  80% { transform: translate(2px,2px);}
+  100% { transform: translate(0,0);}
+}
+
+@keyframes glitchBottom {
+  0% { transform: translate(0,0);}
+  20% { transform: translate(2px,2px);}
+  40% { transform: translate(2px,-2px);}
+  60% { transform: translate(-2px,2px);}
+  80% { transform: translate(-2px,-2px);}
+  100% { transform: translate(0,0);}
+}
+
+/* Sections */
+h2 { font-size: 1.3rem; color: #999; margin-bottom: 2rem;}
+section { margin-bottom: 2rem; }
+section h3 { color: #0ff; margin-bottom: 10px; font-size: 1.2rem; }
+
+.links { display:flex; flex-wrap: wrap; gap:1rem; margin-top:1rem;}
+.links a { color:#f5f5f5; text-decoration:none; border-bottom:1px dashed #f5f5f5; transition:0.3s;}
+.links a:hover { color:#ff4d4d; border-bottom:1px solid #ff4d4d;}
+
+footer { text-align:left; font-size:0.9rem; color:#777; padding:15px 0; border-top:1px solid #222;}
+footer span { color:#ff4d4d;}
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<div class="container">
+  <h1 class="glitch">Akwes</h1>
+  <h2>14 y.o. Student Learning CS and more...</h2>
+
+  <!-- About Me -->
+  <section>
+    <h3>About Me</h3>
+    <p>Hi 👋, I'm Akwes, a 14-year-old guy that loves Vibe-coding and playing games.</p>
+  </section>
+
+  <!-- Skills -->
+  <section>
+    <h3>🛠️ Skills</h3>
+    <p><strong>Languages I know:</strong> English, Russian, Hebrew</p>
+    <p><strong>Tools & Tech:</strong> Arduino IDE, VSCode, Android Studio</p>
+    <p><strong>Currently Learning:</strong> Python</p>
+  </section>
+
+  <!-- Favorites -->
+  <section>
+    <h3>🎮 Favorite Games & Music</h3>
+    <p><strong>Games:</strong> Minecraft, Counter-Strike</p>
+    <p><strong>Music:</strong> What Spotify Gives</p>
+  </section>
+
+  <!-- Connect -->
+  <section>
+    <h3>🌐 Connect with Me</h3>
+    <div class="links">
+      <a href="https://github.com/akw3s" target="_blank">GitHub</a>
+      <a href="mailto:ust33867+site@gmail.com">Email</a>
+      <a href="https://t.me/tamirkina_berloga" target="_blank">Telegram</a>
+      <span>Discord: got banned</span>
+    </div>
+  </section>
+
+  <footer>
+    2025 Akwes | Made with <span>♥</span>
+  </footer>
+</div>
+
+<script>
+// Star background
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const stars = Array.from({length:200}, () => ({
+  x: Math.random()*canvas.width,
+  y: Math.random()*canvas.height,
+  r: Math.random()*1.5,
+  speed: Math.random()*0.3+0.1
+}));
+
+function drawStars() {
+  ctx.fillStyle = "rgba(0,0,0,0.3)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "#0ff";
+  stars.forEach(s => {
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fill();
+    s.y += s.speed;
+    if(s.y>canvas.height) s.y=0;
+  });
+  requestAnimationFrame(drawStars);
+}
+drawStars();
+
+window.addEventListener("resize", ()=>{
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+});
+</script>
+
+</body>
+</html>
