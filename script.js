@@ -1,27 +1,42 @@
-const canvas = document.getElementById("bg");
+<script>
+// Snowflake background
+const canvas = document.getElementById("stars");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let stars = Array.from({ length: 200 }, () => ({
+// Snowflake properties
+const snowflakes = Array.from({length:200}, () => ({
   x: Math.random() * canvas.width,
   y: Math.random() * canvas.height,
-  size: Math.random() * 2,
-  speed: Math.random() * 0.5 + 0.2,
+  r: Math.random() * 3 + 1,        // size of snowflake
+  speedY: Math.random() * 0.5 + 0.2, // vertical speed
+  speedX: Math.random() * 0.5 - 0.25 // horizontal drift
 }));
 
-function draw() {
+function drawSnowflakes() {
   ctx.fillStyle = "rgba(0,0,0,0.3)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "#0ff";
-  stars.forEach((star) => {
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "#fff"; // snowflakes are white
+  snowflakes.forEach(s => {
     ctx.beginPath();
-    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
     ctx.fill();
-    star.y += star.speed;
-    if (star.y > canvas.height) star.y = 0;
+    s.y += s.speedY;
+    s.x += s.speedX;
+
+    // wrap around bottom/top and sides
+    if(s.y > canvas.height) s.y = 0;
+    if(s.x > canvas.width) s.x = 0;
+    if(s.x < 0) s.x = canvas.width;
   });
-  requestAnimationFrame(draw);
+  requestAnimationFrame(drawSnowflakes);
 }
 
-draw();
+drawSnowflakes();
+
+window.addEventListener("resize", ()=>{
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
