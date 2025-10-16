@@ -160,28 +160,19 @@ const stars = Array.from({length:200}, () => ({
   speed: Math.random()*0.3+0.1
 }));
 
-const starColors = ["#ff4d4d","#00ff00","#8a2be2","#00bfff"]; // red, green, purple, blue
-let currentColorIndex = 0;
-
-// Change all stars color every 500ms
-setInterval(() => {
-  currentColorIndex = (currentColorIndex + 1) % starColors.length;
-}, 500);
-
 function drawStars() {
   ctx.fillStyle = "rgba(0,0,0,0.3)";
   ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "#0ff";
   stars.forEach(s => {
     ctx.beginPath();
     ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-    ctx.fillStyle = starColors[currentColorIndex];
     ctx.fill();
     s.y += s.speed;
     if(s.y>canvas.height) s.y=0;
   });
   requestAnimationFrame(drawStars);
 }
-
 drawStars();
 
 window.addEventListener("resize", ()=>{
