@@ -99,6 +99,83 @@ section h3 { color: #0ff; margin-bottom: 10px; font-size: 1.2rem; }
 
 footer { text-align:left; font-size:0.9rem; color:#777; padding:15px 0; border-top:1px solid #222;}
 footer span { color:#ff4d4d;}
+
+/* === Anonymous Questions Sidebar === */
+#anonBox {
+  position: fixed;
+  right: 20px;
+  top: 100px;
+  width: 300px;
+  background: rgba(20,20,20,0.95);
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 15px;
+  color: #f5f5f5;
+  font-family: 'Space Mono', monospace;
+  z-index: 999;
+  box-shadow: 0 0 15px rgba(0,255,255,0.3);
+  backdrop-filter: blur(5px);
+}
+
+#anonBox h3 {
+  color: #0ff;
+  font-size: 1.1rem;
+  margin-top: 0;
+  text-align: center;
+}
+
+#anonBox textarea {
+  width: 100%;
+  height: 70px;
+  background: #111;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 8px;
+  resize: none;
+  font-family: 'Space Mono', monospace;
+}
+
+#anonBox button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background: #0ff;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#anonBox button:hover {
+  background: #ff4d4d;
+  color: #fff;
+  box-shadow: 0 0 10px #ff4d4d;
+}
+
+#questionsList {
+  margin-top: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.question {
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 6px 8px;
+  margin-bottom: 8px;
+}
+
+.question span {
+  display: block;
+  font-size: 0.7rem;
+  color: #888;
+  margin-top: 4px;
+  text-align: right;
+}
 </style>
 </head>
 <body>
@@ -117,10 +194,10 @@ footer span { color:#ff4d4d;}
 
   <!-- Skills -->
   <section>
-    <h3> Skills</h3>
+    <h3>Skills</h3>
     <p><strong>Languages I know:</strong> English, Russian, Hebrew</p>
     <p><strong>Tools:</strong> Arduino IDE, VSCode, Android Studio</p>
-    <p><strong>Tech:</strong> Laptop: Asus Vivobook Pro 15 Mouse: G Pro X Superlight</p>
+    <p><strong>Tech:</strong> Laptop: Asus Vivobook Pro 15 | Mouse: G Pro X Superlight</p>
     <p><strong>Currently Learning:</strong> Python</p>
   </section>
 
@@ -147,14 +224,47 @@ footer span { color:#ff4d4d;}
   </footer>
 </div>
 
+<!-- === Anonymous Questions Sidebar === -->
+<div id="anonBox">
+  <h3>💬 Anonymous Questions</h3>
+  <textarea id="questionInput" placeholder="Write something..." maxlength="200"></textarea>
+  <button onclick="postQuestion()">Post</button>
+  <div id="questionsList"></div>
+</div>
+
 <script>
-// Snowflake background
+// === Anonymous Question System ===
+const qInput = document.getElementById("questionInput");
+const qList = document.getElementById("questionsList");
+
+let questions = JSON.parse(localStorage.getItem("anonQuestions")) || [];
+renderQuestions();
+
+function postQuestion() {
+  const text = qInput.value.trim();
+  if (!text) return;
+  questions.unshift({ text, time: new Date().toLocaleString() });
+  localStorage.setItem("anonQuestions", JSON.stringify(questions));
+  qInput.value = "";
+  renderQuestions();
+}
+
+function renderQuestions() {
+  qList.innerHTML = "";
+  questions.forEach(q => {
+    const div = document.createElement("div");
+    div.className = "question";
+    div.innerHTML = `<p>${q.text}</p><span>${q.time}</span>`;
+    qList.appendChild(div);
+  });
+}
+
+// === Snowflake background ===
 const canvas = document.getElementById("stars");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// Snowflake properties
 const snowflakes = Array.from({length: 150}, () => ({
   x: Math.random() * canvas.width,
   y: Math.random() * canvas.height,
@@ -163,7 +273,6 @@ const snowflakes = Array.from({length: 150}, () => ({
   speedX: Math.random() * 0.5 - 0.25
 }));
 
-// Function to draw a simple snowflake
 function drawSnowflake(x, y, size) {
   ctx.strokeStyle = "#fff";
   ctx.lineWidth = 1;
@@ -192,7 +301,6 @@ function drawSnowflakes() {
 
   requestAnimationFrame(drawSnowflakes);
 }
-
 drawSnowflakes();
 
 window.addEventListener("resize", () => {
@@ -201,17 +309,5 @@ window.addEventListener("resize", () => {
 });
 </script>
 
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
