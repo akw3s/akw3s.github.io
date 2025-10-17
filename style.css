@@ -42,7 +42,7 @@ body {
 
 .glitch::before,
 .glitch::after {
-  content: "AKWES";
+  content: "Akwes";
   position: absolute;
   left: 0;
   top: 0;
@@ -136,4 +136,5 @@ footer {
 footer span { 
   color:#ff4d4d;
 }
+
 
