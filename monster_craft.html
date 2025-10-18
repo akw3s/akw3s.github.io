@@ -13,9 +13,9 @@ body {
   font-family: 'Space Mono', monospace;
   background: black;
   color: #f5f5f5;
+  line-height: 1.6;
   overflow: hidden;
   height: 100vh;
-  position: relative;
 }
 
 /* Snowflake canvas */
@@ -33,70 +33,91 @@ body {
   position: relative;
   z-index: 1;
   text-align: center;
-  padding: 20px;
+  padding: 60px 30px 30px 30px;
 }
 
 /* Header */
 header {
   position: relative;
-  padding-top: 20px;
-}
-
-h1 {
-  font-size: 2em;
-  margin: 10px 0;
 }
 
 /* Back to home button */
 .back-btn {
   position: absolute;
-  top: 10px;
+  top: 20px;
   left: 20px;
-  color: #0ff;
+  color: #00ffff;
   text-decoration: none;
-  border-bottom: 1px dashed #0ff;
+  border-bottom: 1px solid #00ffff;
   transition: 0.3s;
 }
 
 .back-btn:hover {
-  color: #ff4d4d;
-  border-bottom: 1px solid #ff4d4d;
+  color: #ff00ff;
+  border-bottom-color: #ff00ff;
+}
+
+h1 {
+  font-size: 2em;
+  margin-top: 0;
 }
 
 /* Content */
 main {
-  margin-top: 20px;
+  margin-top: 40px;
   font-size: 1rem;
   color: #f5f5f5;
 }
 
-/* Footer like main page */
+/* Footer */
 footer {
   text-align: left;
   font-size: 0.9rem;
   color: #777;
   padding: 15px 0;
-  border-top: 1px solid #222;
-  margin-top: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  position: relative;
 }
 
-footer a {
-  color: #f5f5f5;
+footer .top {
+  margin-bottom: 5px;
+}
+
+footer .top a {
+  color: #7289da; /* Discord blue */
   text-decoration: none;
-  border-bottom: 1px dashed #f5f5f5;
+  border-bottom: 1px dashed #7289da;
   transition: 0.3s;
 }
 
-footer a:hover {
+footer .top a:hover {
   color: #ff4d4d;
   border-bottom: 1px solid #ff4d4d;
 }
 
-footer span {
-  color: #ff4d4d;
+footer .line {
+  border-top: 1px solid #222;
+  margin: 5px 0;
+}
+
+footer .bottom {
+  color: #f5f5f5;
+}
+
+/* Snowflake styles */
+.snowflake {
+  position: fixed;
+  top: 0;
+  color: white;
+  font-size: 1.2em;
+  user-select: none;
+  pointer-events: none;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh);
+  }
 }
 </style>
 </head>
@@ -117,17 +138,18 @@ footer span {
   </main>
 
   <footer>
-    <div>
-      Akwes | Made with <3 <span></span>
-    </div>
-    <div>
+    <div class="top">
       <a href="https://discord.gg/EjV3ZWwNAG" target="_blank">Discord</a>
+    </div>
+    <div class="line"></div>
+    <div class="bottom">
+      Akwes | Made with <3
     </div>
   </footer>
 </div>
 
 <script>
-// === Snowflake background (same as main page) ===
+// === Snowflake background ===
 const canvas = document.getElementById("stars");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
