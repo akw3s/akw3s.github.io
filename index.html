@@ -97,8 +97,30 @@ section h3 { color: #0ff; margin-bottom: 10px; font-size: 1.2rem; }
 .links a { color:#f5f5f5; text-decoration:none; border-bottom:1px dashed #f5f5f5; transition:0.3s;}
 .links a:hover { color:#ff4d4d; border-bottom:1px solid #ff4d4d;}
 
+/* Footer */
 footer { text-align:left; font-size:0.9rem; color:#777; padding:15px 0; border-top:1px solid #222;}
 footer span { color:#ff4d4d;}
+
+/* Monster Craft button */
+.monster-btn {
+  display: inline-block;
+  background: transparent;
+  color: #0ff;
+  border: 1px solid #0ff;
+  padding: 10px 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+  text-decoration: none;
+  margin-top: 20px;
+}
+
+.monster-btn:hover {
+  background: #0ff;
+  color: black;
+  box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+}
 </style>
 </head>
 <body>
@@ -108,6 +130,9 @@ footer span { color:#ff4d4d;}
 <div class="container">
   <h1 class="glitch">Akwes</h1>
   <h2>14 y.o Student Learning CS and more...</h2>
+
+  <!-- Monster Craft button -->
+  <a href="monster_craft" class="monster-btn">Enter Monster Craft</a>
 
   <!-- About Me -->
   <section>
@@ -201,5 +226,3 @@ window.addEventListener("resize", () => {
 
 </body>
 </html>
-
-
