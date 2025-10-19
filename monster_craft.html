@@ -69,38 +69,42 @@ main {
   color: #f5f5f5;
 }
 
-/* Footer */
-footer {
-  text-align: left;
-  font-size: 0.9rem;
-  color: #777;
-  padding: 15px 0;
-  position: relative;
+/* Section */
+section {
+  margin-top: 40px;
 }
 
-footer .top {
-  margin-bottom: 5px;
+section h3 {
+  color: #0ff;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
 }
 
-footer .top a {
-  color: #7289da; /* Discord blue */
+/* Links */
+.links a {
+  color: #7289da;
   text-decoration: none;
   border-bottom: 1px dashed #7289da;
   transition: 0.3s;
 }
 
-footer .top a:hover {
+.links a:hover {
   color: #ff4d4d;
   border-bottom: 1px solid #ff4d4d;
 }
 
-footer .line {
+/* Footer (copied from main page style) */
+footer {
+  text-align: left;
+  font-size: 0.9rem;
+  color: #777;
+  padding: 15px 0;
   border-top: 1px solid #222;
-  margin: 5px 0;
+  margin-top: 30px;
 }
 
-footer .bottom {
-  color: #f5f5f5;
+footer span {
+  color: #ff4d4d;
 }
 
 /* Snowflake styles */
@@ -145,7 +149,8 @@ footer .bottom {
   </section>
 
   <footer>
-     Akwes | Made with <3 <span></span>
+    <div class="line"></div>
+    Akwes | Made with <span><3</span>
   </footer>
 </div>
 
@@ -202,4 +207,3 @@ window.addEventListener("resize", () => {
 
 </body>
 </html>
-
