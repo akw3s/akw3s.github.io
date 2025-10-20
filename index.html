@@ -101,7 +101,13 @@ section h3 { color: #0ff; margin-bottom: 10px; font-size: 1.2rem; }
 footer { text-align:left; font-size:0.9rem; color:#777; padding:15px 0; border-top:1px solid #222;}
 footer span { color:#ff4d4d;}
 
-/* Monster Craft button */
+/* Buttons */
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 .monster-btn {
   display: inline-block;
   background: transparent;
@@ -114,7 +120,6 @@ footer span { color:#ff4d4d;}
   transition: 0.3s;
   text-decoration: none;
   margin-top: 20px;
-  float: right;
 }
 
 .monster-btn:hover {
@@ -132,8 +137,11 @@ footer span { color:#ff4d4d;}
   <h1 class="glitch">Akwes</h1>
   <h2>14 y.o Student Learning CS and more...</h2>
 
-  <!-- Monster Craft button (now on the right) -->
-  <a href="monster_craft" class="monster-btn">Monster Craft</a>
+  <!-- Button group -->
+  <div class="button-group">
+    <a href="monster_craft" class="monster-btn">Monster Craft</a>
+    <a href="https://akw3s.github.io/crystal_craft" class="monster-btn">Crystal Craft</a>
+  </div>
 
   <!-- About Me -->
   <section>
@@ -227,4 +235,3 @@ window.addEventListener("resize", () => {
 
 </body>
 </html>
-
