@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Akwes | Crystal Craft</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+/* Body */
+body {
+  margin: 0;
+  font-family: 'Space Mono', monospace;
+  background: black;
+  color: #f5f5f5;
+  line-height: 1.6;
+}
+
+/* Background canvas */
+#stars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Container */
+.container {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 60px 30px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+header {
+  position: relative;
+}
+
+/* Back button */
+.back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: #00ffff;
+  text-decoration: none;
+  border-bottom: 1px solid #00ffff;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  color: #ff00ff;
+  border-bottom-color: #ff00ff;
+}
+
+/* Headings */
+h1 {
+  font-size: 2em;
+  margin-top: 0;
+}
+
+/* Sections */
+main, section {
+  margin-top: 40px;
+  text-align: left;
+}
+
+section h3 {
+  color: #0ff;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+/* Links */
+.links a {
+  color: #7289da;
+  text-decoration: none;
+  border-bottom: 1px dashed #7289da;
+  transition: 0.3s;
+}
+
+.links a:hover {
+  color: #ff4d4d;
+  border-bottom: 1px solid #ff4d4d;
+}
+
+/* Gallery */
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.gallery img {
+  width: 280px;
+  height: 160px;
+  object-fit: cover;
+  border: 2px solid #0ff;
+  border-radius: 10px;
+  transition: transform 0.3s, border-color 0.3s;
+  cursor: pointer;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+  border-color: #ff4d4d;
+}
+
+/* Footer */
+footer {
+  text-align: left;
+  font-size: 0.9rem;
+  color: #777;
+  padding: 20px 0;
+  border-top: 1px solid #222;
+  margin-top: 30px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .gallery img { width: 48%; height: 120px; }
+  .back-btn { top: 12px; left: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ❄ Background -->
+<canvas id="stars"></canvas>
+
+<div class="container">
+  <header>
+    <a href="/" class="back-btn">← Back to Home</a>
+    <h1>Crystal Craft</h1>
+  </header>
+
+  <main>
+    <p>Welcome to <strong>Crystal Craft</strong> — a multi-mode Minecraft server where creativity, skill, and teamwork come together. Dive into classic survival, thrilling BedWars battles, or explore our unique custom survival world enhanced with datapacks.</p>
+  </main>
+
+  <section>
+    <h3>About the Server</h3>
+    <p>
+      Crystal Craft offers a variety of game modes designed for every type of player:
+    </p>
+    <ul>
+      <li><strong>🏹 BedWars:</strong> Battle other teams, defend your bed, and conquer the arena.</li>
+      <li><strong>🌲 Survival:</strong> Classic survival with a friendly and active community.</li>
+      <li><strong>🔮 Custom Survival:</strong> A datapack-powered experience with new mechanics, mobs, and progression.</li>
+    </ul>
+    <p>
+      Version: <strong>1.21.1</strong><br>
+      Type: <strong>Multi-Mode Server</strong><br>
+      Features: BedWars arenas, datapacks, community events, economy system, and much more!
+    </p>
+  </section>
+
+  <section>
+    <h3>Gallery</h3>
+    <div class="gallery">
+      <!-- Replace with real screenshots -->
+      <img src="https://i.imgur.com/Z4hXGx8.jpeg" alt="BedWars Arena" />
+      <img src="https://i.imgur.com/3mM2iV9.jpeg" alt="Spawn Area" />
+      <img src="https://i.imgur.com/4xvMiVZ.jpeg" alt="Custom Survival World" />
+      <img src="https://i.imgur.com/2Z1WyGV.jpeg" alt="Players in Action" />
+      <img src="https://i.imgur.com/6VXGxRn.jpeg" alt="Datapack Structures" />
+    </div>
+  </section>
+
+  <section>
+    <h3>Join Us</h3>
+    <div class="links">
+      <a href="https://discord.gg/ZjmWEd8dJg" target="_blank">Discord</a>
+      <a href="https://t.me/mc_crystal_craft" target="_blank">Telegram</a>
+    </div>
+  </section>
+
+  <footer>
+    Akwes | Made with <span>&lt;3</span> | Crystal Craft Community
+  </footer>
+</div>
+
+<script>
+/* Background Animation */
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const snowflakes = Array.from({length: 150}, () => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height,
+  size: Math.random() * 4 + 2,
+  speedY: Math.random() * 0.7 + 0.2,
+  speedX: Math.random() * 0.6 - 0.3
+}));
+
+function drawSnowflake(x, y, size) {
+  ctx.strokeStyle = '#00ffff';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  for (let i = 0; i < 6; i++) {
+    const angle = (i * Math.PI) / 3;
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + size * Math.cos(angle), y + size * Math.sin(angle));
+  }
+  ctx.stroke();
+}
+
+function loop() {
+  ctx.fillStyle = 'rgba(0,0,0,0.25)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  snowflakes.forEach(s => {
+    drawSnowflake(s.x, s.y, s.size);
+    s.y += s.speedY;
+    s.x += s.speedX;
+    if (s.y > canvas.height + 10) s.y = -10;
+    if (s.x > canvas.width + 10) s.x = -10;
+    if (s.x < -10) s.x = canvas.width + 10;
+  });
+
+  requestAnimationFrame(loop);
+}
+loop();
+
+/* Click to open images */
+document.querySelectorAll('.gallery img').forEach(img => {
+  img.addEventListener('click', () => window.open(img.src, '_blank'));
+});
+</script>
+
+</body>
+</html>
