@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+:root{
+  --bg:#03060a;
+  --panel:#071018;
+  --accent:#00ffcc;
+  --danger:#ff4d4d;
+  --muted:#8b9;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:'Space Mono',monospace;background:linear-gradient(180deg,#000614 0%, #03060a 60%);color:#cfe;}
+.container{
+  height:100%;
+  display:flex;
+  gap:20px;
+  padding:24px;
+  align-items:stretch;
+}
+
+/* Sidebar */
+.sidebar{
+  width:260px;
+  background:rgba(0,0,0,0.35);
+  border:1px solid rgba(0,255,204,0.08);
+  padding:18px;
+  border-radius:8px;
+  backdrop-filter: blur(6px);
+}
+.brand{
+  font-size:1.2rem;
+  color:var(--accent);
+  margin-bottom:12px;
+}
+.nav a{
+  display:block;
+  padding:10px 8px;
+  color:#9fd;
+  text-decoration:none;
+  border-left:3px solid transparent;
+  margin-bottom:6px;
+}
+.nav a.active{ border-left-color:var(--accent); color:white; background:rgba(0,255,204,0.03); }
+
+/* Main panel */
+.panel{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.header .title{ font-size:1.1rem; color:var(--accent); }
+.header .back a{
+  color:#cfe; text-decoration:none; border:1px solid rgba(255,255,255,0.05);
+  padding:6px 10px; border-radius:6px; display:inline-block;
+}
+.grid{
+  display:grid;
+  grid-template-columns: 1fr 360px;
+  gap:16px;
+  align-items:start;
+}
+
+/* widgets */
+.card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12));
+  border: 1px solid rgba(0,255,204,0.06);
+  padding:12px;
+  border-radius:8px;
+}
+.terminal{
+  background:#000;
+  color:#8cffb3;
+  padding:14px;
+  font-family: monospace;
+  font-size:13px;
+  height:320px;
+  overflow:auto;
+  border-radius:6px;
+  border:1px solid rgba(0,255,204,0.06);
+  box-shadow: inset 0 0 30px rgba(0,255,204,0.02);
+}
+.controls { display:flex; gap:8px; margin-bottom:8px; }
+.controls button{
+  padding:8px 10px; border-radius:6px; border:none; cursor:pointer; font-family:'Space Mono';
+}
+.controls .run{ background:var(--accent); color:#001; }
+.controls .danger{ background:var(--danger); color:white; }
+
+.stat {
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:8px;
+  font-size:0.95rem;
+}
+
+/* fake form */
+.form-row{ display:flex; gap:8px; margin-top:8px; }
+.form-row input, .form-row select {
+  padding:8px; background:transparent; border:1px solid rgba(255,255,255,0.06); color:#cfe; border-radius:6px; flex:1;
+}
+
+/* footer small */
+.small{ font-size:0.85rem; color:#7ea; opacity:0.9; }
+
+/* blinking cursor for fake typing */
+.cursor{ display:inline-block; width:8px; height:16px; background:var(--accent); margin-left:6px; animation:blink 1s steps(1) infinite; vertical-align:middle;}
+@keyframes blink{50%{opacity:0}}
+
+a.link { color:var(--accent); text-decoration:none; }
+
+/* responsive */
+@media (max-width:900px){
+  .grid{ grid-template-columns: 1fr; }
+  .sidebar{ display:none; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <aside class="sidebar">
+    <div class="brand">Admin</div>
+    <nav class="nav">
+      <a class="active" href="#">Dashboard</a>
+      <a href="#">Users</a>
+      <a href="#">Servers</a>
+      <a href="#">Logs</a>
+      <a href="#">Settings</a>
+    </nav>
+
+    <div style="margin-top:18px; font-size:0.9rem; color:#9fd;">
+      <div class="small">Server</div>
+      <div style="font-weight:700; color:#fff;">CrystalCraft</div>
+      <div class="small" style="margin-top:8px">Status: <span style="color:#7fff9a">Online</span></div>
+    </div>
+  </aside>
+
+  <main class="panel">
+    <div class="header">
+      <div class="title">Admin Dashboard <span style="opacity:.6; font-size:.9rem"></span></div>
+      <div class="back"><a href="index.html">&larr; Back to site</a></div>
+    </div>
+
+    <div class="grid">
+      <section class="card">
+        <div class="stat"><div>Active Users</div><div style="font-weight:700">42</div></div>
+        <div class="stat"><div>Server Load</div><div style="font-weight:700">12%</div></div>
+        <div class="stat"><div>Memory</div><div style="font-weight:700">1.2 GB</div></div>
+
+        <div style="margin-top:12px;">
+          <div class="small">Quick Actions</div>
+          <div class="form-row" style="margin-top:8px;">
+            <select id="actionSelect">
+              <option value="restart">Restart Server</option>
+              <option value="clearLogs">Clear Logs</option>
+              <option value="ban">Ban User</option>
+            </select>
+            <input id="targetInput" placeholder="target (username/id)">
+            <button class="run" id="doAction">Execute</button>
+          </div>
+          <div id="actionResult" class="small" style="margin-top:8px; color:#9fd;"></div>
+        </div>
+
+        <hr style="border:none; border-top:1px solid rgba(255,255,255,0.03); margin:12px 0">
+
+        <div class="small">Recent events</div>
+        <div style="margin-top:8px; font-size:0.9rem; color:#bdf;">
+          • Player <strong>NotVasya</strong> joined. <span style="color:#7ea">2m ago</span><br>
+          • Build saved to /worlds/arena. <span style="color:#7ea">10m ago</span><br>
+          • Auto-backup completed. <span style="color:#7ea">30m ago</span>
+        </div>
+      </section>
+
+      <aside>
+        <div class="card" style="margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="small">Console</div>
+            <div class="small" id="consoleTime">—</div>
+          </div>
+          <div id="terminal" class="terminal" aria-live="polite"></div>
+          <div style="margin-top:8px;" class="controls">
+            <button class="run" id="fakeCmd">Run diagnostics</button>
+            <button class="danger" id="clearConsole">Clear</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="small">Login as admin</div>
+          <div style="margin-top:8px;">
+            <input id="adminName" placeholder="username" style="width:100%; margin-bottom:8px; padding:8px; border-radius:6px; background:transparent; border:1px solid rgba(255,255,255,0.05); color:#cfe;">
+            <input id="adminPass" placeholder="password" type="password" style="width:100%; padding:8px; border-radius:6px; background:transparent; border:1px solid rgba(255,255,255,0.05); color:#cfe;">
+            <div style="display:flex; gap:8px; margin-top:8px;">
+              <button class="run" id="fakeLogin">Login</button>
+              <button id="fakeLogout">Logout</button>
+            </div>
+            <div id="loginResult" class="small" style="margin-top:8px;"></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div style="text-align:right; color:#7ea; font-size:0.85rem;"></div>
+
+  </main>
+</div>
+
+<script>
+// tiny helper: append lines to the terminal
+const terminal = document.getElementById('terminal');
+const consoleTime = document.getElementById('consoleTime');
+function appendLine(txt, delay=0){
+  setTimeout(()=>{
+    const p = document.createElement('div');
+    p.textContent = txt;
+    terminal.appendChild(p);
+    terminal.scrollTop = terminal.scrollHeight;
+  }, delay);
+}
+
+// initial fake boot lines
+appendLine('[system] initializing modules...', 200);
+appendLine('[net] interfaces up — 3 connected', 600);
+appendLine('[db] connection established', 1000);
+appendLine('[backup] last backup: 2025-10-23 03:12', 1400);
+consoleTime.textContent = new Date().toLocaleString();
+
+// "run diagnostics" button
+document.getElementById('fakeCmd').addEventListener('click', () => {
+  appendLine('> running diagnostics...', 0);
+  appendLine('> pinging world server... ok (23ms)', 300);
+  appendLine('> disk usage: 38% used', 700);
+  appendLine('> checking plugin signatures... ok', 1200);
+  appendLine('> diagnostics complete. No errors found.', 1600);
+});
+
+// clear console
+document.getElementById('clearConsole').addEventListener('click', () => {
+  terminal.innerHTML = '';
+  appendLine('[console cleared]');
+});
+
+// quick actions
+document.getElementById('doAction').addEventListener('click', () => {
+  const act = document.getElementById('actionSelect').value;
+  const target = document.getElementById('targetInput').value || '(none)';
+  const res = document.getElementById('actionResult');
+  if(act === 'restart'){
+    res.textContent = 'Restart scheduled... ';
+    appendLine(`> scheduled restart by user (target: ${target})`);
+  } else if(act === 'clearLogs'){
+    res.textContent = 'Logs cleared ';
+    appendLine('> logs cleared by admin');
+  } else if(act === 'ban'){
+    res.textContent = `User ${target} banned `;
+    appendLine(`> user ${target} banned`);
+  } else { res.textContent = 'Action done '; }
+  setTimeout(()=>{ res.textContent = ''; }, 3000);
+});
+
+// fake login
+document.getElementById('fakeLogin').addEventListener('click', () => {
+  const u = document.getElementById('adminName').value;
+  const p = document.getElementById('adminPass').value;
+  const res = document.getElementById('loginResult');
+  if(u === 'admin' && p === 'akw3s'){
+    res.style.color = '#9f9';
+    res.textContent = 'Login successful — Welcome admin.';
+    appendLine('> admin login: success');
+  } else {
+    res.style.color = '#f88';
+    res.textContent = 'Login failed.';
+    appendLine('> admin login: failed');
+  }
+  setTimeout(()=>{ res.textContent = ''; }, 4000);
+});
+
+// fake logout
+document.getElementById('fakeLogout').addEventListener('click', () => {
+  appendLine('> admin logged out');
+  const res = document.getElementById('loginResult');
+  res.style.color = '#9fd';
+  res.textContent = 'Logged out ';
+  setTimeout(()=> res.textContent = '', 2500);
+});
+</script>
+</body>
+</html>
