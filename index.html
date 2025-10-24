@@ -7,7 +7,6 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
 
-/* Body */
 body {
   margin: 0;
   font-family: 'Space Mono', monospace;
@@ -16,26 +15,20 @@ body {
   line-height: 1.6;
   padding: 40px 60px;
   position: relative;
-  display: block;
 }
 
-/* Snowflake background */
+/* Background */
 #stars {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   z-index: 0;
 }
 
-/* Container */
-.container {
-  position: relative;
-  z-index: 1;
-}
+/* Main content */
+.container { position: relative; z-index: 1; }
 
-/* Glitch effect */
+/* Glitch title */
 .glitch {
   font-size: 4rem;
   position: relative;
@@ -43,22 +36,17 @@ body {
   display: inline-block;
   animation: flicker 1s infinite;
 }
-
-.glitch::before,
-.glitch::after {
+.glitch::before, .glitch::after {
   content: "Akwes";
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 0; top: 0;
   opacity: 0.8;
 }
-
 .glitch::before {
   color: #0ff;
   z-index: -1;
   animation: glitchTop 2s infinite linear alternate-reverse;
 }
-
 .glitch::after {
   color: #f0f;
   z-index: -2;
@@ -69,7 +57,6 @@ body {
   0%,19%,21%,23%,25%,54%,56%,100% {opacity:1;}
   20%,22%,24%,55% {opacity:0.4;}
 }
-
 @keyframes glitchTop {
   0% { transform: translate(0,0);}
   20% { transform: translate(-2px,-2px);}
@@ -78,7 +65,6 @@ body {
   80% { transform: translate(2px,2px);}
   100% { transform: translate(0,0);}
 }
-
 @keyframes glitchBottom {
   0% { transform: translate(0,0);}
   20% { transform: translate(2px,2px);}
@@ -98,8 +84,22 @@ section h3 { color: #0ff; margin-bottom: 10px; font-size: 1.2rem; }
 .links a:hover { color:#ff4d4d; border-bottom:1px solid #ff4d4d;}
 
 /* Footer */
-footer { text-align:left; font-size:0.9rem; color:#777; padding:15px 0; border-top:1px solid #222;}
-footer span { color:#ff4d4d;}
+footer {
+  text-align:left;
+  font-size:0.9rem;
+  color:#777;
+  padding:15px 0;
+  border-top:1px solid #222;
+}
+footer a.heart {
+  color:#ff4d4d;
+  text-decoration: none;
+  font-weight: 700;
+  margin-left: 6px;
+  cursor: pointer;
+  transition: color .2s;
+}
+footer a.heart:hover { color:#0ff; }
 
 /* Buttons */
 .button-group {
@@ -107,7 +107,6 @@ footer span { color:#ff4d4d;}
   justify-content: flex-end;
   gap: 10px;
 }
-
 .monster-btn {
   display: inline-block;
   background: transparent;
@@ -121,7 +120,6 @@ footer span { color:#ff4d4d;}
   text-decoration: none;
   margin-top: 20px;
 }
-
 .monster-btn:hover {
   background: #0ff;
   color: black;
@@ -137,19 +135,16 @@ footer span { color:#ff4d4d;}
   <h1 class="glitch">Akwes</h1>
   <h2>14 y.o Student Learning CS and more...</h2>
 
-  <!-- Button group -->
   <div class="button-group">
     <a href="monster_craft" class="monster-btn">Monster Craft</a>
     <a href="https://akw3s.github.io/crystal_craft" class="monster-btn">Crystal Craft</a>
   </div>
 
-  <!-- About Me -->
   <section>
     <h3>About Me</h3>
     <p>Hi, I'm Akwes, a 14 year old guy that loves Vibe-coding and playing games.</p>
   </section>
 
-  <!-- Skills -->
   <section>
     <h3>Skills</h3>
     <p><strong>Languages I know:</strong> English, Russian, Hebrew</p>
@@ -158,14 +153,12 @@ footer span { color:#ff4d4d;}
     <p><strong>Currently Learning:</strong> Python</p>
   </section>
 
-  <!-- Favorites -->
   <section>
     <h3>Games and music I like</h3>
     <p><strong>Games:</strong> Minecraft, Counter-Strike</p>
     <p><strong>Music:</strong> What Spotify Gives</p>
   </section>
 
-  <!-- Connect -->
   <section>
     <h3>Contact Me</h3>
     <div class="links">
@@ -178,12 +171,12 @@ footer span { color:#ff4d4d;}
   </section>
 
   <footer>
-     Akwes | Made with <3 <span></span>
+    Akwes | Made with <a class="heart" id="heart" href="admin.html">&lt;3</a>
   </footer>
 </div>
 
 <script>
-// === Snowflake background ===
+// === Stars background (same as before) ===
 const canvas = document.getElementById("stars");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
