@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Day of Undone Dreams — September 10</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#7dd3fc;--muted:#9ca3af;--glass: rgba(255,255,255,0.03)}
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; background:linear-gradient(180deg,#071028 0%, #071526 100%); color:#e6eef8; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:28px}
+    .wrap{width:100%; max-width:980px}
+    header{display:flex; align-items:center; gap:16px; margin-bottom:18px}
+    header h1{font-size:20px; margin:0}
+    header p{margin:0; color:var(--muted)}
+    .grid{display:grid; grid-template-columns:1fr 380px; gap:18px}
+    @media (max-width:880px){.grid{grid-template-columns:1fr}}
+
+    form{background:var(--card); padding:16px; border-radius:12px; box-shadow:0 6px 18px rgba(3,7,18,0.6)}
+    label{display:block; font-size:13px; margin-top:10px; color:var(--muted)}
+    input[type=text], textarea, select{width:100%; margin-top:6px; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background:var(--glass); color:inherit}
+    textarea{min-height:100px; resize:vertical}
+    .controls{display:flex; gap:8px; margin-top:12px}
+    button{background:var(--accent); color:#012031; border:none; padding:10px 12px; border-radius:10px; cursor:pointer; font-weight:600}
+    button.ghost{background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.04)}
+
+    .side{display:flex; flex-direction:column; gap:12px}
+    .stats{background:var(--card); padding:12px; border-radius:12px}
+    .list{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:12px; border-radius:12px; max-height:60vh; overflow:auto}
+    .dream{background:rgba(255,255,255,0.02); padding:12px; border-radius:10px; margin-bottom:10px}
+    .dream h3{margin:0 0 6px 0}
+    .meta{font-size:13px; color:var(--muted); margin-bottom:8px}
+    .tags{display:flex; gap:8px; flex-wrap:wrap}
+    .tag{padding:6px 8px; border-radius:999px; background:rgba(255,255,255,0.03); font-size:12px}
+    .actions{display:flex; gap:6px; margin-top:8px}
+    button.small{padding:6px 8px; font-size:13px; border-radius:8px}
+    .filter{display:flex; gap:8px; align-items:center; margin-bottom:10px}
+    .empty{color:var(--muted); padding:20px; text-align:center}
+    footer{margin-top:16px; color:var(--muted); font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Day of Undone Dreams — September 10</h1>
+        <p>Every September 10, we gather to reflect on our undone dreams — and celebrate the ones we've finally completed. Share your journey below.</p>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section>
+        <form id="dreamForm" aria-label="Share a dream">
+          <label for="author">Your name (optional)</label>
+          <input id="author" type="text" placeholder="e.g. Maya, or 'anonymous'">
+
+          <label for="title">Dream title (short)</label>
+          <input id="title" type="text" placeholder="e.g. 'Write a novel', 'Travel to Japan'" required>
+
+          <label for="desc">Describe your dream</label>
+          <textarea id="desc" placeholder="What stopped you? What would it mean to you?" required></textarea>
+
+          <label for="status">Status</label>
+          <select id="status">
+            <option value="undone">Undone — still dreaming</option>
+            <option value="done">Done — I completed it</option>
+          </select>
+
+          <label for="how">If done: how did you do it? (optional)</label>
+          <textarea id="how" placeholder="Steps you took, resources, motivation, advice..."></textarea>
+
+          <div class="controls">
+            <button type="submit">Share</button>
+            <button type="button" class="ghost" id="clearBtn">Clear all</button>
+          </div>
+        </form>
+
+        <footer>
+          Tip: encourage classmates to post honestly — undone dreams are important stories too. Remember, the event takes place every <strong>September 10</strong>.
+        </footer>
+      </section>
+
+      <aside class="side">
+        <div class="stats">
+          <div style="display:flex;justify-content:space-between;align-items:center"><strong>Community</strong><span id="count">0</span></div>
+          <div style="margin-top:8px;color:var(--muted)">Filters</div>
+          <div class="filter">
+            <label><input type="radio" name="view" value="all" checked> All</label>
+            <label><input type="radio" name="view" value="undone"> Undone</label>
+            <label><input type="radio" name="view" value="done"> Done</label>
+          </div>
+        </div>
+
+        <div class="list" id="list" aria-live="polite">
+          <div class="empty">No dreams yet — be the first to share.</div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const KEY = 'dayOfUndoneDreams_v1'
+    const form = document.getElementById('dreamForm')
+    const listEl = document.getElementById('list')
+    const countEl = document.getElementById('count')
+    const clearBtn = document.getElementById('clearBtn')
+    const exportBtn = document.getElementById('exportBtn')
+
+    function load(){ try{const raw = localStorage.getItem(KEY); return raw? JSON.parse(raw) : []}catch(e){return []} }
+    function save(items){ localStorage.setItem(KEY, JSON.stringify(items)) }
+    function uid(){return Date.now().toString(36) + Math.random().toString(36).slice(2,8)}
+
+    function render(){
+      const items = load()
+      const view = document.querySelector('input[name=view]:checked').value
+      const filtered = items.filter(it => view === 'all' ? true : it.status === view)
+      countEl.textContent = items.length
+      listEl.innerHTML = ''
+      if(!filtered.length){ listEl.innerHTML = '<div class="empty">No dreams here (try a different filter).</div>'; return }
+
+      filtered.slice().reverse().forEach(it => {
+        const card = document.createElement('article')
+        card.className = 'dream'
+        const title = document.createElement('h3'); title.textContent = it.title
+        const meta = document.createElement('div'); meta.className='meta'; meta.textContent = `${it.author || 'Anonymous'} • ${new Date(it.created).toLocaleString()}`
+        const desc = document.createElement('p'); desc.textContent = it.desc
+        card.appendChild(title); card.appendChild(meta); card.appendChild(desc)
+        if(it.status === 'done' && it.how){
+          const how = document.createElement('div'); how.style.marginTop='8px'; how.innerHTML = '<strong>How they did it:</strong><div>'+escapeHtml(it.how).replace(/\n/g,'<br>')+'</div>'
+          card.appendChild(how)
+        }
+        const actions = document.createElement('div'); actions.className='actions'
+        const toggle = document.createElement('button'); toggle.className='small'; toggle.textContent = it.status === 'done' ? 'Mark undone' : 'Mark done'
+        toggle.addEventListener('click', ()=>{
+          it.status = it.status === 'done' ? 'undone' : 'done'
+          save(items); render()
+        })
+        const del = document.createElement('button'); del.className='small'; del.textContent='Delete'
+        del.addEventListener('click', ()=>{
+          if(confirm('Delete this entry?')){
+            const idx = items.findIndex(x=>x.id===it.id); if(idx>-1) items.splice(idx,1); save(items); render()
+          }
+        })
+        actions.appendChild(toggle); actions.appendChild(del)
+        card.appendChild(actions)
+        listEl.appendChild(card)
+      })
+    }
+
+    function escapeHtml(s){ return String(s).replace(/[&<>\"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) }
+
+    form.addEventListener('submit', e=>{
+      e.preventDefault()
+      const items = load()
+      const newItem = {
+        id: uid(),
+        author: document.getElementById('author').value.trim() || 'Anonymous',
+        title: document.getElementById('title').value.trim(),
+        desc: document.getElementById('desc').value.trim(),
+        status: document.getElementById('status').value,
+        how: document.getElementById('how').value.trim(),
+        created: new Date().toISOString()
+      }
+      items.push(newItem)
+      save(items)
+      form.reset()
+      render()
+    })
+
+    clearBtn.addEventListener('click', ()=>{
+      if(confirm('Clear ALL dreams? This cannot be undone.')){
+        localStorage.removeItem(KEY); render()
+      }
+    })
+
+    exportBtn.addEventListener('click', ()=>{
+      const items = load()
+      const data = JSON.stringify(items, null, 2)
+      const blob = new Blob([data], {type:'application/json'})
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a'); a.href = url; a.download = 'day-of-undone-dreams.json'; a.click(); URL.revokeObjectURL(url)
+    })
+
+    document.querySelectorAll('input[name=view]').forEach(r=>r.addEventListener('change', render))
+
+    if(!load().length){
+      save([
+        {id:uid(), author:'A. Cohen', title:'Finish a short story', desc:'Started many times. I never finish because I self-edit too early.', status:'undone', how:'', created:new Date().toISOString()},
+        {id:uid(), author:'Lina', title:'Learn to skateboard', desc:'Was scared of falling; never tried in high school.', status:'done', how:'Joined a local club, practiced 15 minutes every day, wore pads.', created:new Date().toISOString()}
+      ])
+    }
+
+    render()
+  </script>
+</body>
+</html>
