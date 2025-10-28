@@ -22,6 +22,8 @@
     .controls{display:flex; gap:8px; margin-top:12px}
     button{background:var(--accent); color:#012031; border:none; padding:10px 12px; border-radius:10px; cursor:pointer; font-weight:600}
     button.ghost{background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.04)}
+    a.button{display:inline-block; padding:10px 12px; border-radius:10px; font-weight:600; background:var(--accent); color:#012031; text-decoration:none; margin-bottom:12px; cursor:pointer; text-align:center;}
+    a.button:hover{opacity:0.85;}
 
     .side{display:flex; flex-direction:column; gap:12px}
     .stats{background:var(--card); padding:12px; border-radius:12px}
@@ -49,6 +51,9 @@
 
     <main class="grid">
       <section>
+        <!-- Back Home Button -->
+        <a href="https://akw3s.github.io/" class="button">← Back Home</a>
+
         <form id="dreamForm" aria-label="Share a dream">
           <label for="author">Your name (optional)</label>
           <input id="author" type="text" placeholder="e.g. Maya, or 'anonymous'">
@@ -97,41 +102,40 @@
     </main>
   </div>
 
- <script>
-  const WORKER_URL = "https://save-dreams.ust33867.workers.dev/"; // <— Replace with your actual Worker URL 
+  <script>
+    const WORKER_URL = "https://save-dreams.ust33867.workers.dev/"; // <— Replace with your actual Worker URL 
 
-  const form = document.getElementById('dreamForm');
+    const form = document.getElementById('dreamForm');
 
-  form.addEventListener('submit', async e => {
-    e.preventDefault();
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
 
-    const dream = {
-      author: document.getElementById('author').value.trim() || 'Anonymous',
-      title: document.getElementById('title').value.trim(),
-      desc: document.getElementById('desc').value.trim(),
-      status: document.getElementById('status').value,
-      how: document.getElementById('how').value.trim(),
-    };
+      const dream = {
+        author: document.getElementById('author').value.trim() || 'Anonymous',
+        title: document.getElementById('title').value.trim(),
+        desc: document.getElementById('desc').value.trim(),
+        status: document.getElementById('status').value,
+        how: document.getElementById('how').value.trim(),
+      };
 
-    try {
-      const res = await fetch(WORKER_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dream)
-      });
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dream)
+        });
 
-      if (res.ok) {
-        alert('✅ Dream saved successfully!');
-        form.reset();
-      } else {
-        const text = await res.text();
-        alert('⚠️ Failed to save: ' + text);
+        if (res.ok) {
+          alert('✅ Dream saved successfully!');
+          form.reset();
+        } else {
+          const text = await res.text();
+          alert('⚠️ Failed to save: ' + text);
+        }
+      } catch (err) {
+        alert('❌ Error: ' + err.message);
       }
-    } catch (err) {
-      alert('❌ Error: ' + err.message);
-    }
-  });
-</script>
-
+    });
+  </script>
 </body>
 </html>
