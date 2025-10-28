@@ -97,99 +97,41 @@
     </main>
   </div>
 
-  <script>
-    const KEY = 'dayOfUndoneDreams_v1'
-    const form = document.getElementById('dreamForm')
-    const listEl = document.getElementById('list')
-    const countEl = document.getElementById('count')
-    const clearBtn = document.getElementById('clearBtn')
-    const exportBtn = document.getElementById('exportBtn')
+ <script>
+  const WORKER_URL = "https://save-dreams.ust33867.workers.dev/"; // <— Replace with your actual Worker URL 
 
-    function load(){ try{const raw = localStorage.getItem(KEY); return raw? JSON.parse(raw) : []}catch(e){return []} }
-    function save(items){ localStorage.setItem(KEY, JSON.stringify(items)) }
-    function uid(){return Date.now().toString(36) + Math.random().toString(36).slice(2,8)}
+  const form = document.getElementById('dreamForm');
 
-    function render(){
-      const items = load()
-      const view = document.querySelector('input[name=view]:checked').value
-      const filtered = items.filter(it => view === 'all' ? true : it.status === view)
-      countEl.textContent = items.length
-      listEl.innerHTML = ''
-      if(!filtered.length){ listEl.innerHTML = '<div class="empty">No dreams here (try a different filter).</div>'; return }
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
 
-      filtered.slice().reverse().forEach(it => {
-        const card = document.createElement('article')
-        card.className = 'dream'
-        const title = document.createElement('h3'); title.textContent = it.title
-        const meta = document.createElement('div'); meta.className='meta'; meta.textContent = `${it.author || 'Anonymous'} • ${new Date(it.created).toLocaleString()}`
-        const desc = document.createElement('p'); desc.textContent = it.desc
-        card.appendChild(title); card.appendChild(meta); card.appendChild(desc)
-        if(it.status === 'done' && it.how){
-          const how = document.createElement('div'); how.style.marginTop='8px'; how.innerHTML = '<strong>How they did it:</strong><div>'+escapeHtml(it.how).replace(/\n/g,'<br>')+'</div>'
-          card.appendChild(how)
-        }
-        const actions = document.createElement('div'); actions.className='actions'
-        const toggle = document.createElement('button'); toggle.className='small'; toggle.textContent = it.status === 'done' ? 'Mark undone' : 'Mark done'
-        toggle.addEventListener('click', ()=>{
-          it.status = it.status === 'done' ? 'undone' : 'done'
-          save(items); render()
-        })
-        const del = document.createElement('button'); del.className='small'; del.textContent='Delete'
-        del.addEventListener('click', ()=>{
-          if(confirm('Delete this entry?')){
-            const idx = items.findIndex(x=>x.id===it.id); if(idx>-1) items.splice(idx,1); save(items); render()
-          }
-        })
-        actions.appendChild(toggle); actions.appendChild(del)
-        card.appendChild(actions)
-        listEl.appendChild(card)
-      })
-    }
+    const dream = {
+      author: document.getElementById('author').value.trim() || 'Anonymous',
+      title: document.getElementById('title').value.trim(),
+      desc: document.getElementById('desc').value.trim(),
+      status: document.getElementById('status').value,
+      how: document.getElementById('how').value.trim(),
+    };
 
-    function escapeHtml(s){ return String(s).replace(/[&<>\"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) }
+    try {
+      const res = await fetch(WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dream)
+      });
 
-    form.addEventListener('submit', e=>{
-      e.preventDefault()
-      const items = load()
-      const newItem = {
-        id: uid(),
-        author: document.getElementById('author').value.trim() || 'Anonymous',
-        title: document.getElementById('title').value.trim(),
-        desc: document.getElementById('desc').value.trim(),
-        status: document.getElementById('status').value,
-        how: document.getElementById('how').value.trim(),
-        created: new Date().toISOString()
+      if (res.ok) {
+        alert('✅ Dream saved successfully!');
+        form.reset();
+      } else {
+        const text = await res.text();
+        alert('⚠️ Failed to save: ' + text);
       }
-      items.push(newItem)
-      save(items)
-      form.reset()
-      render()
-    })
-
-    clearBtn.addEventListener('click', ()=>{
-      if(confirm('Clear ALL dreams? This cannot be undone.')){
-        localStorage.removeItem(KEY); render()
-      }
-    })
-
-    exportBtn.addEventListener('click', ()=>{
-      const items = load()
-      const data = JSON.stringify(items, null, 2)
-      const blob = new Blob([data], {type:'application/json'})
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a'); a.href = url; a.download = 'day-of-undone-dreams.json'; a.click(); URL.revokeObjectURL(url)
-    })
-
-    document.querySelectorAll('input[name=view]').forEach(r=>r.addEventListener('change', render))
-
-    if(!load().length){
-      save([
-        {id:uid(), author:'A. Cohen', title:'Finish a short story', desc:'Started many times. I never finish because I self-edit too early.', status:'undone', how:'', created:new Date().toISOString()},
-        {id:uid(), author:'Lina', title:'Learn to skateboard', desc:'Was scared of falling; never tried in high school.', status:'done', how:'Joined a local club, practiced 15 minutes every day, wore pads.', created:new Date().toISOString()}
-      ])
+    } catch (err) {
+      alert('❌ Error: ' + err.message);
     }
+  });
+</script>
 
-    render()
-  </script>
 </body>
 </html>
